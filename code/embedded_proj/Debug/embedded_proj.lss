@@ -1,0 +1,452 @@
+
+embedded_proj.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000022e  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000002a2  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000002  00800060  00800060  000002a2  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  000002a2  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000002d4  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 00000058  00000000  00000000  00000310  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   0000087a  00000000  00000000  00000368  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 0000066a  00000000  00000000  00000be2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000426  00000000  00000000  0000124c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  000000b0  00000000  00000000  00001674  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    000003a5  00000000  00000000  00001724  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    000001f3  00000000  00000000  00001ac9  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 00000048  00000000  00000000  00001cbc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 6c 00 	jmp	0xd8	; 0xd8 <__vector_1>
+   8:	0c 94 77 00 	jmp	0xee	; 0xee <__vector_2>
+   c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  10:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  18:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  1c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  20:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  24:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  38:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  3c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  48:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  4c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+  60:	20 e0       	ldi	r18, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+  68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+  6a:	a2 36       	cpi	r26, 0x62	; 98
+  6c:	b2 07       	cpc	r27, r18
+  6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+  70:	0e 94 94 00 	call	0x128	; 0x128 <main>
+  74:	0c 94 15 01 	jmp	0x22a	; 0x22a <_exit>
+
+00000078 <__bad_interrupt>:
+  78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <ADC_int>:
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+void ADC_int()
+{
+ DDRA=0x00;
+  7c:	1a ba       	out	0x1a, r1	; 26
+ ADCSRA |=(1<<ADEN)|(1<<ADPS0)|(1<<ADPS1);  //make adc enable and adjust the prescaller 8 at clock 1MHZ/8=125 khz
+  7e:	86 b1       	in	r24, 0x06	; 6
+  80:	83 68       	ori	r24, 0x83	; 131
+  82:	86 b9       	out	0x06, r24	; 6
+ //ADMUX |=(1<<MUX0)|(1<<MUX1);               // enable adc at PA1 PA2
+ ADMUX |=(1<<ADLAR);                          // use mode of 8bit for storing at ADCH only 
+  84:	3d 9a       	sbi	0x07, 5	; 7
+  86:	08 95       	ret
+
+00000088 <LDR1_value>:
+}
+
+uint8_t LDR1_value(uint8_t LDR1)
+{
+  ADCSRA |=(1<<ADEN);
+  88:	37 9a       	sbi	0x06, 7	; 6
+  ADMUX |=(1<<MUX0);                            // ENABLE THE ADC1 AT PA1
+  8a:	38 9a       	sbi	0x07, 0	; 7
+  ADMUX |=(1<<ADLAR);                          // use mode of 8bit for storing at ADCH only
+  8c:	3d 9a       	sbi	0x07, 5	; 7
+  ADCSRA|=(1<<ADSC);                      //start the conversion operation 
+  8e:	36 9a       	sbi	0x06, 6	; 6
+  while(ADCSRA & (1<<ADSC));              //poling loop waiting till the conversion finish
+  90:	36 99       	sbic	0x06, 6	; 6
+  92:	fe cf       	rjmp	.-4      	; 0x90 <LDR1_value+0x8>
+  LDR1=ADCH;
+  94:	85 b1       	in	r24, 0x05	; 5
+  ADCSRA &=~(1<<ADEN);
+  96:	37 98       	cbi	0x06, 7	; 6
+  return(LDR1);
+}
+  98:	08 95       	ret
+
+0000009a <LDR2_value>:
+
+uint8_t LDR2_value(uint8_t LDR2)
+{
+	ADCSRA |=(1<<ADEN);
+  9a:	37 9a       	sbi	0x06, 7	; 6
+	ADMUX |=(1<<MUX2);                            // ENABLE THE ADC2 AT PA2
+  9c:	3a 9a       	sbi	0x07, 2	; 7
+	ADMUX |=(1<<ADLAR);                          // use mode of 8bit for storing at ADCH only
+  9e:	3d 9a       	sbi	0x07, 5	; 7
+	ADCSRA|=(1<<ADSC);                      //start the conversion operation
+  a0:	36 9a       	sbi	0x06, 6	; 6
+	while(ADCSRA & (1<<ADSC));              //poling loop waiting till the conversion finish
+  a2:	36 99       	sbic	0x06, 6	; 6
+  a4:	fe cf       	rjmp	.-4      	; 0xa2 <LDR2_value+0x8>
+	LDR2=ADCH;                               // store the value at register as digital 8bit 
+  a6:	85 b1       	in	r24, 0x05	; 5
+	ADCSRA &=~(1<<ADEN);
+  a8:	37 98       	cbi	0x06, 7	; 6
+	return(LDR2);
+}
+  aa:	08 95       	ret
+
+000000ac <ultra_int>:
+
+void ultra_int();
+
+void ultra_int()
+{
+  DDRD|=(1<<PIND0);
+  ac:	88 9a       	sbi	0x11, 0	; 17
+  DDRD&=~(1<<PIND1);
+  ae:	89 98       	cbi	0x11, 1	; 17
+  PORTD |=(1<<PD2);         // active the internal resistor of pd2
+  b0:	92 9a       	sbi	0x12, 2	; 18
+  PORTD|=(1<<PD1);                     // make high pulse for triggering the sensor with signal width 10us
+  b2:	91 9a       	sbi	0x12, 1	; 18
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  b4:	83 e0       	ldi	r24, 0x03	; 3
+  b6:	8a 95       	dec	r24
+  b8:	f1 f7       	brne	.-4      	; 0xb6 <ultra_int+0xa>
+  ba:	00 00       	nop
+  _delay_us(10);
+  MCUCR |=(1<<ISC01) | (1<<ISC11);    //adjust the interrupt signals to work at isc00 at zero and isc01 at 1 so at any logical change
+  bc:	85 b7       	in	r24, 0x35	; 53
+  be:	8a 60       	ori	r24, 0x0A	; 10
+  c0:	85 bf       	out	0x35, r24	; 53
+  GICR |=(1<<INT0);                   //active interrupt at echo high
+  c2:	8b b7       	in	r24, 0x3b	; 59
+  c4:	80 64       	ori	r24, 0x40	; 64
+  c6:	8b bf       	out	0x3b, r24	; 59
+  sei();
+  c8:	78 94       	sei
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+  ca:	87 ea       	ldi	r24, 0xA7	; 167
+  cc:	91 e6       	ldi	r25, 0x61	; 97
+  ce:	01 97       	sbiw	r24, 0x01	; 1
+  d0:	f1 f7       	brne	.-4      	; 0xce <ultra_int+0x22>
+  d2:	00 c0       	rjmp	.+0      	; 0xd4 <ultra_int+0x28>
+  d4:	00 00       	nop
+  d6:	08 95       	ret
+
+000000d8 <__vector_1>:
+  _delay_ms(100);                      //  finishing word of interrupt code and called the ISR function
+}
+ISR (INT0_vect)
+{
+  d8:	1f 92       	push	r1
+  da:	0f 92       	push	r0
+  dc:	0f b6       	in	r0, 0x3f	; 63
+  de:	0f 92       	push	r0
+  e0:	11 24       	eor	r1, r1
+  PORTC|=(1<<PC0);
+  e2:	a8 9a       	sbi	0x15, 0	; 21
+}
+  e4:	0f 90       	pop	r0
+  e6:	0f be       	out	0x3f, r0	; 63
+  e8:	0f 90       	pop	r0
+  ea:	1f 90       	pop	r1
+  ec:	18 95       	reti
+
+000000ee <__vector_2>:
+	   }
+    }
+}
+
+ISR(INT1_vect)
+{
+  ee:	1f 92       	push	r1
+  f0:	0f 92       	push	r0
+  f2:	0f b6       	in	r0, 0x3f	; 63
+  f4:	0f 92       	push	r0
+  f6:	11 24       	eor	r1, r1
+  f8:	8f 93       	push	r24
+PORTC=0x03;
+  fa:	83 e0       	ldi	r24, 0x03	; 3
+  fc:	85 bb       	out	0x15, r24	; 21
+//while((PORTD))
+}
+  fe:	8f 91       	pop	r24
+ 100:	0f 90       	pop	r0
+ 102:	0f be       	out	0x3f, r0	; 63
+ 104:	0f 90       	pop	r0
+ 106:	1f 90       	pop	r1
+ 108:	18 95       	reti
+
+0000010a <pir_sensor>:
+void pir_sensor()
+{
+	if (PINA &(1<<PA4))
+ 10a:	cc 9b       	sbis	0x19, 4	; 25
+ 10c:	0b c0       	rjmp	.+22     	; 0x124 <pir_sensor+0x1a>
+	{
+		PORTC|=(1<<PC1);
+ 10e:	a9 9a       	sbi	0x15, 1	; 21
+ 110:	2f e9       	ldi	r18, 0x9F	; 159
+ 112:	86 e8       	ldi	r24, 0x86	; 134
+ 114:	91 e0       	ldi	r25, 0x01	; 1
+ 116:	21 50       	subi	r18, 0x01	; 1
+ 118:	80 40       	sbci	r24, 0x00	; 0
+ 11a:	90 40       	sbci	r25, 0x00	; 0
+ 11c:	e1 f7       	brne	.-8      	; 0x116 <pir_sensor+0xc>
+ 11e:	00 c0       	rjmp	.+0      	; 0x120 <pir_sensor+0x16>
+ 120:	00 00       	nop
+ 122:	08 95       	ret
+		_delay_ms(500);
+		//LDR2=0;
+	}
+	else
+	{
+		PORTC&=~(1<<PC1);
+ 124:	a9 98       	cbi	0x15, 1	; 21
+ 126:	08 95       	ret
+
+00000128 <main>:
+uint8_t LDR2;      //store for values of ldr1
+
+int main(void)
+{
+    /* Replace with your application code */	
+	DDRA=0x00;             // port a for input PIR sensor  
+ 128:	1a ba       	out	0x1a, r1	; 26
+	DDRC=0x0f;            // make port c output for relay
+ 12a:	8f e0       	ldi	r24, 0x0F	; 15
+ 12c:	84 bb       	out	0x14, r24	; 20
+	DDRD|=(1<<PD1);           // make PD2 in for interrept 
+ 12e:	89 9a       	sbi	0x11, 1	; 17
+	DDRD&=~(1<<PD2);
+ 130:	8a 98       	cbi	0x11, 2	; 17
+	DDRD&=~(1<<PD3);
+ 132:	8b 98       	cbi	0x11, 3	; 17
+	//DDRD=0x02;
+	PORTD|=(1<<PD2)|(1<<PD3);   //ACTIVE THE PULL UP RESISTOR 
+ 134:	82 b3       	in	r24, 0x12	; 18
+ 136:	8c 60       	ori	r24, 0x0C	; 12
+ 138:	82 bb       	out	0x12, r24	; 18
+	MCUCR |=(1<<ISC10);        //adjust the interrupt to work at ant RIASING EDEGE
+ 13a:	85 b7       	in	r24, 0x35	; 53
+ 13c:	84 60       	ori	r24, 0x04	; 4
+ 13e:	85 bf       	out	0x35, r24	; 53
+	GICR |=(1<<INT1);      //active interrupt at INT1
+ 140:	8b b7       	in	r24, 0x3b	; 59
+ 142:	80 68       	ori	r24, 0x80	; 128
+ 144:	8b bf       	out	0x3b, r24	; 59
+	sei();                //calling tge ISR function
+ 146:	78 94       	sei
+	ADC_int();
+ 148:	0e 94 3e 00 	call	0x7c	; 0x7c <ADC_int>
+	while (1) 
+    {
+	LDR1=LDR1_value(LDR1);
+    LDR1=(LDR1*5)/255;                        //convert the value from digital to analog using referense volt
+ 14c:	cf ef       	ldi	r28, 0xFF	; 255
+ 14e:	d0 e0       	ldi	r29, 0x00	; 0
+	GICR |=(1<<INT1);      //active interrupt at INT1
+	sei();                //calling tge ISR function
+	ADC_int();
+	while (1) 
+    {
+	LDR1=LDR1_value(LDR1);
+ 150:	80 91 61 00 	lds	r24, 0x0061	; 0x800061 <LDR1>
+ 154:	0e 94 44 00 	call	0x88	; 0x88 <LDR1_value>
+    LDR1=(LDR1*5)/255;                        //convert the value from digital to analog using referense volt
+ 158:	90 e0       	ldi	r25, 0x00	; 0
+ 15a:	9c 01       	movw	r18, r24
+ 15c:	22 0f       	add	r18, r18
+ 15e:	33 1f       	adc	r19, r19
+ 160:	22 0f       	add	r18, r18
+ 162:	33 1f       	adc	r19, r19
+ 164:	82 0f       	add	r24, r18
+ 166:	93 1f       	adc	r25, r19
+ 168:	be 01       	movw	r22, r28
+ 16a:	0e 94 ed 00 	call	0x1da	; 0x1da <__divmodhi4>
+ 16e:	60 93 61 00 	sts	0x0061, r22	; 0x800061 <LDR1>
+	LDR2=LDR2_value(LDR2);
+ 172:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
+ 176:	0e 94 4d 00 	call	0x9a	; 0x9a <LDR2_value>
+	LDR2=(LDR2*5)/255;                        //convert the value from digital to analog using referense volt
+ 17a:	90 e0       	ldi	r25, 0x00	; 0
+ 17c:	9c 01       	movw	r18, r24
+ 17e:	22 0f       	add	r18, r18
+ 180:	33 1f       	adc	r19, r19
+ 182:	22 0f       	add	r18, r18
+ 184:	33 1f       	adc	r19, r19
+ 186:	82 0f       	add	r24, r18
+ 188:	93 1f       	adc	r25, r19
+ 18a:	be 01       	movw	r22, r28
+ 18c:	0e 94 ed 00 	call	0x1da	; 0x1da <__divmodhi4>
+ 190:	60 93 60 00 	sts	0x0060, r22	; 0x800060 <_edata>
+	if (LDR1<2)
+ 194:	80 91 61 00 	lds	r24, 0x0061	; 0x800061 <LDR1>
+ 198:	82 30       	cpi	r24, 0x02	; 2
+ 19a:	60 f4       	brcc	.+24     	; 0x1b4 <main+0x8c>
+	   {
+	   ultra_int();       //active the ultrasonic sensor and active the lamp at near objects
+ 19c:	0e 94 56 00 	call	0xac	; 0xac <ultra_int>
+ 1a0:	2f e9       	ldi	r18, 0x9F	; 159
+ 1a2:	86 e8       	ldi	r24, 0x86	; 134
+ 1a4:	91 e0       	ldi	r25, 0x01	; 1
+ 1a6:	21 50       	subi	r18, 0x01	; 1
+ 1a8:	80 40       	sbci	r24, 0x00	; 0
+ 1aa:	90 40       	sbci	r25, 0x00	; 0
+ 1ac:	e1 f7       	brne	.-8      	; 0x1a6 <main+0x7e>
+ 1ae:	00 c0       	rjmp	.+0      	; 0x1b0 <main+0x88>
+ 1b0:	00 00       	nop
+ 1b2:	01 c0       	rjmp	.+2      	; 0x1b6 <main+0x8e>
+	   _delay_ms(500);
+	   }
+	   else
+	   {
+	   PORTC&=~(1<<PC0);  //shutdown the lamp at day light at out side
+ 1b4:	a8 98       	cbi	0x15, 0	; 21
+	   //_delay_ms(500);
+	   }
+	   if (LDR2<2)
+ 1b6:	80 91 60 00 	lds	r24, 0x0060	; 0x800060 <_edata>
+ 1ba:	82 30       	cpi	r24, 0x02	; 2
+ 1bc:	60 f4       	brcc	.+24     	; 0x1d6 <main+0xae>
+	   {
+	   pir_sensor();
+ 1be:	0e 94 85 00 	call	0x10a	; 0x10a <pir_sensor>
+ 1c2:	2f e9       	ldi	r18, 0x9F	; 159
+ 1c4:	86 e8       	ldi	r24, 0x86	; 134
+ 1c6:	91 e0       	ldi	r25, 0x01	; 1
+ 1c8:	21 50       	subi	r18, 0x01	; 1
+ 1ca:	80 40       	sbci	r24, 0x00	; 0
+ 1cc:	90 40       	sbci	r25, 0x00	; 0
+ 1ce:	e1 f7       	brne	.-8      	; 0x1c8 <main+0xa0>
+ 1d0:	00 c0       	rjmp	.+0      	; 0x1d2 <main+0xaa>
+ 1d2:	00 00       	nop
+ 1d4:	bd cf       	rjmp	.-134    	; 0x150 <main+0x28>
+	   _delay_ms(500);
+	   }
+	   else
+	   {
+	   PORTC&=~(1<<PC1);
+ 1d6:	a9 98       	cbi	0x15, 1	; 21
+ 1d8:	bb cf       	rjmp	.-138    	; 0x150 <main+0x28>
+
+000001da <__divmodhi4>:
+ 1da:	97 fb       	bst	r25, 7
+ 1dc:	07 2e       	mov	r0, r23
+ 1de:	16 f4       	brtc	.+4      	; 0x1e4 <__divmodhi4+0xa>
+ 1e0:	00 94       	com	r0
+ 1e2:	07 d0       	rcall	.+14     	; 0x1f2 <__divmodhi4_neg1>
+ 1e4:	77 fd       	sbrc	r23, 7
+ 1e6:	09 d0       	rcall	.+18     	; 0x1fa <__divmodhi4_neg2>
+ 1e8:	0e 94 01 01 	call	0x202	; 0x202 <__udivmodhi4>
+ 1ec:	07 fc       	sbrc	r0, 7
+ 1ee:	05 d0       	rcall	.+10     	; 0x1fa <__divmodhi4_neg2>
+ 1f0:	3e f4       	brtc	.+14     	; 0x200 <__divmodhi4_exit>
+
+000001f2 <__divmodhi4_neg1>:
+ 1f2:	90 95       	com	r25
+ 1f4:	81 95       	neg	r24
+ 1f6:	9f 4f       	sbci	r25, 0xFF	; 255
+ 1f8:	08 95       	ret
+
+000001fa <__divmodhi4_neg2>:
+ 1fa:	70 95       	com	r23
+ 1fc:	61 95       	neg	r22
+ 1fe:	7f 4f       	sbci	r23, 0xFF	; 255
+
+00000200 <__divmodhi4_exit>:
+ 200:	08 95       	ret
+
+00000202 <__udivmodhi4>:
+ 202:	aa 1b       	sub	r26, r26
+ 204:	bb 1b       	sub	r27, r27
+ 206:	51 e1       	ldi	r21, 0x11	; 17
+ 208:	07 c0       	rjmp	.+14     	; 0x218 <__udivmodhi4_ep>
+
+0000020a <__udivmodhi4_loop>:
+ 20a:	aa 1f       	adc	r26, r26
+ 20c:	bb 1f       	adc	r27, r27
+ 20e:	a6 17       	cp	r26, r22
+ 210:	b7 07       	cpc	r27, r23
+ 212:	10 f0       	brcs	.+4      	; 0x218 <__udivmodhi4_ep>
+ 214:	a6 1b       	sub	r26, r22
+ 216:	b7 0b       	sbc	r27, r23
+
+00000218 <__udivmodhi4_ep>:
+ 218:	88 1f       	adc	r24, r24
+ 21a:	99 1f       	adc	r25, r25
+ 21c:	5a 95       	dec	r21
+ 21e:	a9 f7       	brne	.-22     	; 0x20a <__udivmodhi4_loop>
+ 220:	80 95       	com	r24
+ 222:	90 95       	com	r25
+ 224:	bc 01       	movw	r22, r24
+ 226:	cd 01       	movw	r24, r26
+ 228:	08 95       	ret
+
+0000022a <_exit>:
+ 22a:	f8 94       	cli
+
+0000022c <__stop_program>:
+ 22c:	ff cf       	rjmp	.-2      	; 0x22c <__stop_program>
