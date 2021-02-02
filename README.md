@@ -14,3 +14,5 @@ Project Description:
 2.	Microcontroller analyze the reading to make  decision for active sensors or not
 3.	When sensor active at night or dark places this start to detect the motion or distance of bodies and then give reading to microcontroller to chose any light source will be on
 4.	Then microcontroller give pulse on relay channels for lighting on .
+
+video of circuit and logic simulation on proteus: https://drive.google.com/file/d/1gHViTGMDZoRKFoIwSHXFAXbzfssSJvRI/view?usp=sharing
